@@ -91,35 +91,37 @@ export class HomeUpkeepTaskItem extends LitElement {
         gap: 0.75rem;
       }
       .checkbox {
-        margin-top: 0;
+        margin-top: 0.125rem;
       }
       .body {
         min-width: 0;
         flex: 1;
       }
       .title {
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: 500;
-        line-height: 1rem;
+        line-height: 1.3;
         color: var(--hu-text);
         margin: 0;
+        overflow-wrap: anywhere;
       }
       .title.completed {
         color: var(--hu-text-muted);
         text-decoration: line-through;
       }
       .description {
-        margin: 0.25rem 0 0;
-        font-size: 0.875rem;
+        margin: 0.375rem 0 0;
+        font-size: 0.9375rem;
         color: var(--hu-text-muted);
+        overflow-wrap: anywhere;
       }
       .badges {
-        margin-top: 0.25rem;
+        margin-top: 0.5rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
         flex-wrap: wrap;
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
         color: var(--hu-text-muted);
       }
       .actions {
