@@ -1,5 +1,6 @@
 import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 
 import "./components/task-lists";
 import "./components/task-item";
@@ -512,7 +513,7 @@ export class HomeUpkeepPanel extends LitElement {
             <span class="count-due">${due.length}</span>
           </div>
           <div class="task-list">
-            ${due.map((t) => this._renderTaskItem(t))}
+            ${repeat(due, (t) => t.id, (t) => this._renderTaskItem(t))}
             ${due.length === 0
               ? html`<div class="empty-state">
                   <p class="empty-state-text">Nothing due right now</p>
@@ -527,7 +528,7 @@ export class HomeUpkeepPanel extends LitElement {
             <span class="count-upcoming">${upcoming.length}</span>
           </div>
           <div class="task-list">
-            ${upcoming.map((t) => this._renderTaskItem(t))}
+            ${repeat(upcoming, (t) => t.id, (t) => this._renderTaskItem(t))}
             ${upcoming.length === 0
               ? html`<div class="empty-state">
                   <p class="empty-state-text">No upcoming tasks</p>
@@ -542,7 +543,7 @@ export class HomeUpkeepPanel extends LitElement {
             <span class="count-completed">${completed.length}</span>
           </div>
           <div class="task-list">
-            ${completed.map((t) => this._renderTaskItem(t))}
+            ${repeat(completed, (t) => t.id, (t) => this._renderTaskItem(t))}
             ${completed.length === 0
               ? html`<div class="empty-state">
                   <p class="empty-state-text">No completed tasks yet</p>

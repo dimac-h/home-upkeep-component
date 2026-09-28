@@ -18,3 +18,5 @@ coverage.xml
 config/*
 !config/configuration.yaml
 /docs/
+/custom_components/home_upkeep/frontend/dist/*
+/.idea/*

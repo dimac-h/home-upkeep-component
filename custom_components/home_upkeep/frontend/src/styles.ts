@@ -82,12 +82,12 @@ export const buttonStyles = css`
   .btn-secondary,
   .btn-danger {
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.25rem;
     border-radius: 0.5rem;
     transition: background-color 0.2s;
     border: none;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .btn-primary:disabled,
   .btn-secondary:disabled,
@@ -122,12 +122,15 @@ export const buttonStyles = css`
 export const inputStyles = css`
   .input-field {
     width: 100%;
+    min-width: 0;
+    height: 2.25rem;
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--hu-border);
     border-radius: 0.5rem;
     background: var(--hu-surface);
     color: var(--hu-text);
     font-size: 0.875rem;
+    line-height: 1.25rem;
     font-family: inherit;
     box-sizing: border-box;
   }
@@ -136,13 +139,34 @@ export const inputStyles = css`
     box-shadow: 0 0 0 2px var(--hu-primary);
     border-color: transparent;
   }
+  /* Native <select> chrome (arrow, internal padding) is sized by each
+     browser engine independently of our padding/line-height, so the same
+     .input-field rules render at a different height than <input>. Drop the
+     native appearance and draw our own arrow so the height stays in sync
+     with text inputs across Firefox/WebKit. */
+  select.input-field {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: linear-gradient(
+        45deg,
+        transparent 50%,
+        var(--hu-text-muted) 50%
+      ),
+      linear-gradient(135deg, var(--hu-text-muted) 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.15rem) center,
+      calc(100% - 0.85rem) center;
+    background-size: 0.3rem 0.3rem;
+    background-repeat: no-repeat;
+    padding-right: 1.75rem;
+  }
 `;
 
 /** `.checkbox` */
 export const checkboxStyles = css`
   .checkbox {
-    height: 1rem;
-    width: 1rem;
+    height: 1.125rem;
+    width: 1.125rem;
     accent-color: var(--hu-primary);
     border: 1px solid var(--hu-border);
     border-radius: 0.25rem;
@@ -417,7 +441,7 @@ export const taskItemStyles = css`
     background: var(--hu-surface);
     border-radius: 0.5rem;
     border: 1px solid var(--hu-border);
-    padding: 1rem;
+    padding: 1.25rem;
     transition: box-shadow 0.2s;
   }
   .task-item:hover {
