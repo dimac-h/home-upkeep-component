@@ -1,8 +1,8 @@
-import { mdiPencil, mdiTrashCanOutline, mdiUpload } from "@mdi/js";
+import { mdiPencil, mdiTrashCanOutline } from "@mdi/js";
 import { LitElement, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
-import type { ImportDoc, TaskList } from "../ha-api";
+import type { TaskList } from "../ha-api";
 import { icon } from "../icon";
 import {
   buttonStyles,
@@ -19,8 +19,6 @@ export class HomeUpkeepTaskLists extends LitElement {
   @property({ type: Number }) selectedListId: number | undefined;
 
   @property({ type: Boolean }) mobileMenuOpen = false;
-
-  @query("#import-input") private _importInput?: HTMLInputElement;
 
   static styles = [
     cardStyles,
@@ -143,43 +141,6 @@ export class HomeUpkeepTaskLists extends LitElement {
     }
   }
 
-  private _openImport() {
-    this._importInput?.click();
-  }
-
-  private async _handleImportFiles(e: Event): Promise<void> {
-    const input = e.target as HTMLInputElement;
-    const files = Array.from(input.files ?? []);
-    input.value = "";
-    if (!files.length) return;
-
-    const docs: ImportDoc[] = [];
-    for (const file of files) {
-      let json: unknown;
-      try {
-        json = JSON.parse(await file.text());
-      } catch {
-        alert(`${file.name} is not valid JSON.`);
-        return;
-      }
-      if (
-        typeof json !== "object" ||
-        json === null ||
-        !("list" in json) ||
-        typeof (json as { list?: unknown }).list !== "object"
-      ) {
-        alert(`${file.name} doesn't look like a list_<id>.json export.`);
-        return;
-      }
-      docs.push(json as ImportDoc);
-    }
-
-    this._fire("list-import", { docs });
-    if (this.mobileMenuOpen) {
-      this._fire("mobile-menu-toggle");
-    }
-  }
-
   render() {
     return html`
       ${this.mobileMenuOpen
@@ -193,22 +154,6 @@ export class HomeUpkeepTaskLists extends LitElement {
           <div class="header">
             <h2 class="dialog-title">Lists</h2>
             <div class="header-actions">
-              <input
-                id="import-input"
-                type="file"
-                accept="application/json,.json"
-                multiple
-                style="display: none;"
-                @change=${(e: Event) => this._handleImportFiles(e)}
-              />
-              <button
-                class="icon-button"
-                aria-label="Import lists from add-on export"
-                title="Import from add-on export"
-                @click=${() => this._openImport()}
-              >
-                ${icon(mdiUpload)}
-              </button>
               <button class="btn-primary" @click=${() => this._createList()}>
                 New List
               </button>

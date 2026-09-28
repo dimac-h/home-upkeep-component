@@ -56,25 +56,6 @@ export interface TaskList {
   updated_at: string;
 }
 
-/** One add-on `list_<id>.json` file's parsed content. */
-export interface ImportDoc {
-  version?: number;
-  list: TaskList;
-  tasks: Task[];
-}
-
-export interface ImportConflict {
-  id: number;
-  name: string;
-}
-
-export interface ImportResult {
-  imported: boolean;
-  conflicts: ImportConflict[];
-  list_count?: number;
-  task_count?: number;
-}
-
 export interface HomeUpkeepEvent {
   type:
     | "task_created"
@@ -172,17 +153,6 @@ export class HomeUpkeepApi {
     return this.hass.connection.sendMessagePromise({
       type: "home_upkeep/tasks/delete",
       task_id: taskId,
-    });
-  }
-
-  importJson(
-    docs: ImportDoc[],
-    overwriteListIds: number[] = [],
-  ): Promise<ImportResult> {
-    return this.hass.connection.sendMessagePromise({
-      type: "home_upkeep/import_json",
-      docs,
-      overwrite_list_ids: overwriteListIds,
     });
   }
 

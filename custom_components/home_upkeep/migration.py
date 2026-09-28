@@ -106,11 +106,8 @@ async def async_import_from_docs(
     """
     Import lists/tasks from already-parsed `{version, list, tasks}` docs.
 
-    Used by the panel's Import button: the browser reads the user's
-    `list_<id>.json` files directly (via the File API) and sends their
-    parsed content over the WS connection, so no `/config` filesystem
-    access is needed at all. Also used by `async_migrate_addon_docs` for
-    the one-time upgrade migration from the retired add-on companion.
+    Used by `async_migrate_addon_docs` for the one-time upgrade migration
+    from the retired add-on companion.
 
     Args:
         store: The store to import into.

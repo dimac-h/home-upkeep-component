@@ -13,7 +13,6 @@ import type { HomeAssistant, UnsubscribeFunc } from "./ha";
 import {
   HomeUpkeepApi,
   type HomeUpkeepEvent,
-  type ImportDoc,
   type Task,
   type TaskCreate,
   type TaskList,
@@ -419,34 +418,6 @@ export class HomeUpkeepPanel extends LitElement {
     this._editingList = null;
   }
 
-  private async _importDocs(docs: ImportDoc[]): Promise<void> {
-    try {
-      let result = await this._api!.importJson(docs);
-      if (!result.imported) {
-        const names = result.conflicts.map((c) => c.name).join(", ");
-        const overwrite = confirm(
-          `${names} already exist(s). Overwrite with the imported data? ` +
-            "This replaces their tasks too.",
-        );
-        if (!overwrite) return;
-        result = await this._api!.importJson(
-          docs,
-          result.conflicts.map((c) => c.id),
-        );
-      }
-      await this._refreshLists();
-      // The import may have replaced the currently-selected list's tasks
-      // entirely; refresh them too so the view isn't left showing stale
-      // pre-import data.
-      await this._refreshTasks();
-      alert(
-        `Imported ${result.list_count} list(s) and ${result.task_count} task(s).`,
-      );
-    } catch (err) {
-      alert(`Import failed: ${errorMessage(err)}`);
-    }
-  }
-
   private async _deleteList(id: number): Promise<void> {
     const list = this._lists.find((l) => l.id === id);
     if (!list) return;
@@ -634,8 +605,6 @@ export class HomeUpkeepPanel extends LitElement {
             @list-create=${() => {
               this._creatingList = true;
             }}
-            @list-import=${(e: CustomEvent<{ docs: ImportDoc[] }>) =>
-              this._importDocs(e.detail.docs)}
             @list-edit=${(e: CustomEvent<{ list: TaskList }>) => {
               this._editingList = e.detail.list;
             }}
